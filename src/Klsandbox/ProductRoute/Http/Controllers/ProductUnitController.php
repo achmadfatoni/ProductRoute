@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Klsandbox\OrderModel\Models\ProductUnit;
 use Klsandbox\ProductRoute\Http\Requests\CreateProductUnitRequest;
+use Klsandbox\ProductRoute\Http\Requests\ProductUnitRequest;
 
 class ProductUnitController extends Controller
 {
@@ -21,7 +22,7 @@ class ProductUnitController extends Controller
         return view('product-route::units.create');
     }
 
-    public function store(CreateProductUnitRequest $request)
+    public function store(ProductUnitRequest $request)
     {
         ProductUnit::create($request->all());
 
@@ -46,8 +47,9 @@ class ProductUnitController extends Controller
         return view('product-route::units.view', $data);
     }
 
-    public function update(Request $request, $productUnitId)
+    public function update(ProductUnitRequest $request, $productUnitId)
     {
+        $request->all();
         $productUnit = ProductUnit::find($productUnitId);
 
         if (! $productUnit) {
