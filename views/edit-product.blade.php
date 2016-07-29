@@ -292,7 +292,7 @@
                 <div class="col-md-12">
                     <div class="table-responsive" id="product-units-container">
                         <div class="table-responsive">
-                            <table class="{{isset($table_class) ? $table_class : 'table table-bordered table-striped table-condensed mb-none'}}" id="table-list-unit">
+                            <table class="{{isset($table_class) ? $table_class : 'table table-bordered table-striped table-condensed mb-none'}}">
                                 <thead>
                                 <tr>
                                     <th class="text-center">Name</th>
@@ -302,6 +302,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @if(! count($units))
+                                    <tr>
+                                        <td colspan="4" class="text-center"> No Units</td>
+                                    </tr>
+                                @endif
                                 @foreach($units as $unit)
                                     <tr>
                                         <td>{{ $unit->name }}</td>
