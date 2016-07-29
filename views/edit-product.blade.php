@@ -298,7 +298,8 @@
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Description</th>
                                     <th class="text-center">Quantity</th>
-                                    <th class="text-center">Actions</th>
+                                    <th class="text-center">SKU</th>
+                                    <th class="text-center" width="10%">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -312,7 +313,8 @@
                                         <td>{{ $unit->name }}</td>
                                         <td>{{ $unit->description }}</td>
                                         <td>{{ $unit->pivot->quantity }}</td>
-                                        <td>
+                                        <td>{{ $unit->sku }}</td>
+                                        <td class="text-center">
                                             <form method="post" action="{{ url('products/' . $product->id . '/units/' . $unit->id) }}">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="_method" value="DELETE"/>
