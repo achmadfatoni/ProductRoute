@@ -14,20 +14,32 @@
                   action="{{ url('/products/units') }}">
                 {{ csrf_field() }}
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label">Unit Name</label>
-
+                <div class="form-group ">
+                    <label class="col-md-3 control-label">Unit Name *)</label>
                     <div class="col-md-6">
                         <input type="text" class="form-control" name="name" value="{{ old('name') }}" required>
+                        @if ($errors->has('name')) <p class="help-block">{{ $errors->first('name') }}</p> @endif
+                    </div>
+                </div>
+
+                <div class="form-group @if ($errors->has('description')) has-error @endif">
+                    <label class="col-md-3 control-label">Unit Description</label>
+                    <div class="col-md-6">
+                        <textarea rows="10" class="form-control" name="description" required>{{ old('description') }}</textarea>
+                        @if ($errors->has('description')) <p class="help-block">{{ $errors->first('description') }}</p> @endif
+                    </div>
+                </div>
+
+                <div class="form-group @if ($errors->has('sku')) has-error @endif">
+                    <label class="col-md-3 control-label">SKU *) </label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="sku" value="{{ old('sku') }}" required>
+                        @if ($errors->has('sku')) <p class="help-block">{{ $errors->first('sku') }}</p> @endif
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Unit Description</label>
-
-                    <div class="col-md-6">
-                        <textarea rows="10" class="form-control" name="description" required>{{ old('description') }}</textarea>
-                    </div>
+                    <label class="control-la col-md-push-3 col-md-6">*) Required</label>
                 </div>
 
                 <div class="form-group">

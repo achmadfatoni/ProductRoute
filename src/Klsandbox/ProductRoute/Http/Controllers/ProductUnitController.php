@@ -3,6 +3,7 @@
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Klsandbox\OrderModel\Models\ProductUnit;
+use Klsandbox\ProductRoute\Http\Requests\CreateProductUnitRequest;
 
 class ProductUnitController extends Controller
 {
@@ -20,7 +21,7 @@ class ProductUnitController extends Controller
         return view('product-route::units.create');
     }
 
-    public function store(Request $request)
+    public function store(CreateProductUnitRequest $request)
     {
         ProductUnit::create($request->all());
 

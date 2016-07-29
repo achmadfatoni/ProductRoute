@@ -18,7 +18,8 @@
                         <tr>
                             <th class="text-center">Name</th>
                             <th class="text-center">Description</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center">SKU</th>
+                            <th class="text-center" width="10%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,7 +27,8 @@
                             <tr>
                                 <td><a href="{{ url('products/units/' . $item->id) }}">{{ $item->name }}</a></td>
                                 <td>{{ $item->description }}</td>
-                                <td>
+                                <td>{{ $item->sku }}</td>
+                                <td class="text-center">
                                     <form class="form-horizontal" method="post" action="{{ url('products/units/'. $item->id) }}">
                                         {{ csrf_field() }}
                                         <input type="hidden" name="_method" value="delete">
