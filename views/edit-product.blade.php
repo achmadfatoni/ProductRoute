@@ -256,127 +256,72 @@
         </div>
     </section>
 
-    <section class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="panel-title">Product Units</h2>
-        </div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <a href="#modalAddUnit" class="btn modal-add-unit btn-primary"><i class="fa fa-plus"></i> Add Unit</a>
+    <product-unit product_id="{{ $product->id }}" inline-template>
+
+        <section class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Product Units</h2>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" @click="addUnit" v-if="showAddButton"><i class="fa fa-plus"></i> Add Unit</button>
+                    </div>
+                    @include('product-route::units.form.add-unit')
+                    @include('product-route::units.form.edit-unit')
+
                 </div>
-            </div>
 
-            <div id="modalAddUnit" class="modal-block modal-block-primary mfp-hide">
-                <form class="form-horizontal" method="post" action="{{ url('products/' . $product->id . '/units') }}"
-                    id="formAddUnit">
-                    <section class="panel">
-                        <header class="panel-heading">
-                            <h2 class="panel-title">Add Unit</h2>
-                        </header>
-                        <div class="panel-body">
-                            {{ csrf_field() }}
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Unit</label>
-                                <div class="col-md-7">
-                                    <select class="form-control" name="product_unit_id" required>
-                                        <option value="">Select unit</option>
-                                        @foreach($productUnits as $productUnit)
-                                            <option value="{{ $productUnit->id }}">{{ $productUnit->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Quantity</label>
-                                <div class="col-md-7">
-                                    <input type="number" min="1" name="quantity" value="1" class="form-control" required/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Quantity east</label>
-                                <div class="col-md-7">
-                                    <input type="number" min="1" name="quantity_east" value="1" class="form-control" required/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-4">Quantity pickup</label>
-                                <div class="col-md-7">
-                                    <input type="number" min="1" name="quantity_pickup" value="1" class="form-control" required/>
-                                </div>
-                            </div>
-                        </div>
-                        <footer class="panel-footer">
-                            <div class="row">
-                                <div class="col-md-12 text-right">
-                                    <button type="submit" class="btn btn-primary submit-unit">Confirm</button>
-                                    <button class="btn btn-default modal-dismiss">Cancel</button>
-                                </div>
-                            </div>
-                        </footer>
-                    </section>
-                </form>
-            </div>
-
-            <br>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive" id="product-units-container">
-                        <div class="table-responsive">
-                            <table class="{{isset($table_class) ? $table_class : 'table table-bordered table-striped table-condensed mb-none'}}" id="table-list-unit">
-                                <thead>
-                                <tr>
-                                    <th class="text-center">Name</th>
-                                    <th class="text-center">Description</th>
-                                    <th class="text-center">Quantity</th>
-                                    <th class="text-center">Quantity east</th>
-                                    <th class="text-center">Quantity pickup</th>
-                                    <th class="text-center">SKU</th>
-                                    <th class="text-center" width="10%">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if(! count($units))
+                <br>
+                <div class="row" v-if="showAddButton">
+                    <div class="col-md-12">
+                        <div class="table-responsive" id="product-units-container">
+                            <div class="table-responsive">
+                                <table class="{{isset($table_class) ? $table_class : 'table table-bordered table-striped table-condensed mb-none'}}" id="table-list-unit">
+                                    <thead>
                                     <tr>
-                                        <td colspan="7" class="text-center"> No Units</td>
+                                        <th class="text-center">Name</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Quantity</th>
+                                        <th class="text-center">Quantity east</th>
+                                        <th class="text-center">Quantity pickup</th>
+                                        <th class="text-center">SKU</th>
+                                        <th class="text-center" width="10%">Actions</th>
                                     </tr>
-                                @endif
-                                @foreach($units as $unit)
-                                    <tr>
-                                        <td>{{ $unit->name }}</td>
-                                        <td>{{ $unit->description }}</td>
-                                        <td>{{ $unit->pivot->quantity }}</td>
-                                        <td>{{ $unit->pivot->quantity_east }}</td>
-                                        <td>{{ $unit->pivot->quantity_pickup }}</td>
-                                        <td>{{ $unit->sku }}</td>
-                                        <td class="text-center">
-                                            <form method="post" action="{{ url('products/' . $product->id . '/units/' . $unit->id) }}">
-                                                {{ csrf_field() }}
-                                                <input type="hidden" name="_method" value="DELETE"/>
-                                                <button type="submit" class="btn btn-danger delete_with_confirm">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                                <a href="#modalEditUnit"
-                                                   class="btn modal-edit-unit btn-warning"
-                                                   data-unit="{{ $unit->id }}">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-if="! is_units">
+                                            <td colspan="7" class="text-center"> No Units</td>
+                                        </tr>
+                                        <tr v-for="unit in units">
+                                            <td>@{{ unit.name}}</td>
+                                            <td>@{{ unit.description }}</td>
+                                            <td>@{{ unit.pivot.quantity }}</td>
+                                            <td>@{{ unit.pivot.quantity_east }}</td>
+                                            <td>@{{ unit.pivot.quantity_pickup }}</td>
+                                            <td>@{{ unit.sku }}</td>
+                                            <td class="text-center">
+                                                <form method="post" action="@{{ '/products/' + product_id + '/units/' + unit.id }}" v-on:submit.prevent="deleteUnit">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-warning"
+                                                            type="button"
+                                                        @click="editUnit(unit, $enevt)">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <div id="modalEditUnit" class="modal-block modal-block-primary mfp-hide" >
-    </div>
-
+        </section>
+    </product-unit>
     <!-- helper -->
     <input type="hidden" name="viewUnitUrl" value="{{ url('products/' . $product->id . '/units') }}"/>
 

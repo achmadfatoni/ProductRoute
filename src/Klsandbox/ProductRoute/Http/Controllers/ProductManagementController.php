@@ -139,6 +139,17 @@ class ProductManagementController extends Controller
         return Redirect::to('/products/list');
     }
 
+    public function units(Request $request, Product $product){
+        $units = $product->units;
+
+        //unit that not added to product
+        if($request->input('filter') == 'not-in-product') {
+            return ProductUnit::whereNotIn('id', $units->pluck('id'))->get();
+        }
+
+        return $units;
+    }
+
     public function storeUnits(Request $request, $product)
     {
         $product->units()->attach(
@@ -150,14 +161,22 @@ class ProductManagementController extends Controller
             ]
         );
 
+        if($request->ajax()){
+            return $product->units;
+        }
+
         flash()->success('Success!', 'Unit has been added');
 
         return redirect()->back();
     }
 
-    public function deleteUnits($product, $productUnit)
+    public function deleteUnits(Request $request, $product, $productUnit)
     {
         $product->units()->detach($productUnit->id);
+
+        if($request->ajax()){
+            return $product->units;
+        }
 
         flash()->success('Success!', 'Unit has been deleted');
 
@@ -168,23 +187,25 @@ class ProductManagementController extends Controller
     {
         $unit = $product->units->where('id', $productUnit->id)->first();
 
-        $data = [
-            'unit' => $unit,
-            'product' => $product,
-        ];
+        return $unit;
 
-        return view('product-route::view-unit', $data);
     }
 
     public function updateUnits(Request $request, $product, $productUnit)
     {
+
         $unit = $product->units->where('id', $productUnit->id)->first();
+        $pivot = $request->input('pivot');
 
         $unit->pivot->update([
-            'quantity' => $request->input('quantity'),
-            'quantity_east' => $request->input('quantity_east'),
-            'quantity_pickup' => $request->input('quantity_pickup'),
+            'quantity' => $pivot['quantity'],
+            'quantity_east' => $pivot['quantity_east'],
+            'quantity_pickup' => $pivot['quantity_pickup'],
         ]);
+
+        if($request->ajax()){
+            return $product->units;
+        }
 
         flash()->success('Success!', 'Unit has been updated');
 
