@@ -97,6 +97,12 @@ class ProductManagementController extends Controller
         $inputs = array_except($inputs, ['_token']);
 
         $inputs['is_available'] = true;
+
+        foreach ($inputs as $key => $value) {
+            if ($value == '') {
+                unset($inputs[$key]);
+            }
+        }
         $this->model->create($inputs);
 
         Session::flash('success_message', 'Product has been created.');
